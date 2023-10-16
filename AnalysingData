@@ -1,0 +1,215 @@
+import pandas as pd
+import statsmodels.api as sm
+import statsmodels.formula.api as smf
+data = pd.read_csv("C:\\Users\\Divya Shree\\Desktop\\train.csv")
+X = data['LotArea']
+Y = data['SalePrice']
+
+# Add a constant (intercept) to the independent variable
+X = sm.add_constant(X)
+
+# Create a model
+model = sm.OLS(Y, X)
+
+# Fit the model
+results = model.fit()
+
+# Print the summary of the regression
+print(results.summary())
+# Create a model using the formula API
+model = smf.ols(formula='Y ~ X', data=data).fit()
+
+# Fit the model
+model.params
+
+# Print the summary of the regression
+model.summary()
+
+data.shape
+
+          #count number of rows and columns
+num_rows, num_columns = data.shape
+print(f"Number of rows: {num_rows}")
+print(f"Number of columns: {num_columns}")
+
+data.head()       #displays first 5 rows of dataset
+data.info()       #displays information
+data.describe()   #displays count,mean,sd, min, max and quartiles
+data.columns      #displays names of all the attributes 
+
+          #OLS Regression Results  with scatter plot graph and Regression line.
+X = data['LotArea']
+Y = data['SalePrice']
+
+# Add a constant (intercept) to the independent variable
+X = sm.add_constant(X)
+
+# Create a model
+model = sm.OLS(Y, X)
+
+# Fit the model
+results = model.fit()
+
+# Print the summary of the regression
+print(results.summary())
+plt.scatter(X['LotArea'], Y, label="Data")
+plt.plot(X['LotArea'], results.predict(X), color='blue', label="Regression Line")
+plt.xlabel("Independent Variable (x)")
+plt.ylabel("Dependent Variable (y)")
+plt.title("Scatter Plot and Regression Line")
+plt.legend()
+plt.show()
+
+          #finding and printing the quantitative, qualitative and nominal data of the dataset
+
+quantitative_data = df.select_dtypes(include=['int64', 'float64'])
+quantitative_count = len(quantitative_data.columns)
+qualitative_data = df.select_dtypes(exclude=['int64', 'float64'])
+qualitative_count = len(qualitative_data.columns)
+nominal_data = qualitative_data.select_dtypes(include=['object'])
+nominal_count = len(nominal_data.columns)
+print("\nb. Count of Data Types:")
+print(f"Quantitative (Numerical) Data: {quantitative_count} columns")
+print(f"Qualitative (Non-Numerical) Data: {qualitative_count} columns")
+print(f"Nominal Data (Categorical): {nominal_count} columns")
+
+          #correlation Heatmap
+
+import seaborn as sns
+numeric_data = data.select_dtypes(include=[float, int])
+# Calculate the correlation matrix
+correlation_matrix = numeric_data.corr()
+# Create a correlation heatmap
+plt.figure(figsize=(10, 8))
+sns.heatmap(correlation_matrix, annot=True, cmap="coolwarm", linewidths=0.5)
+plt.title("Correlation Heatmap")
+plt.show()
+correlation_matrix.corr()
+
+      #Boxplot for all the attributes 
+plt.figure(figsize=(12, 12))
+sns.boxplot(data=data, orient="h", palette="Set2")
+plt.title("Box Plots for All Attributes")
+plt.xticks(ticks=[10000 * i for i in range(6)], labels=[str(10000 * i) for i in range(6)])
+plt.show()
+
+
+          #Handling of Outliers
+
+# Define a function to remove outliers
+def remove_outliers(df, col_name, threshold=1.5):
+    q1 = df[col_name].quantile(0.25)
+    q3 = df[col_name].quantile(0.75)
+    iqr = q3 - q1
+    lower_bound = q1 - threshold * iqr
+    upper_bound = q3 + threshold * iqr
+    return df[(df[col_name] >= lower_bound) & (df[col_name] <= upper_bound)]
+
+        # Example of removing outliers from a specific column
+col_name_remove = 'LotArea'
+threshold_remove = 1.5
+print(f"Before removing outliers in '{col_name_remove}':")
+print(data[col_name_remove].describe())
+data_no_outliers = remove_outliers(data, col_name_remove)
+print(f"After removing outliers in '{col_name_remove}':")
+print(data_no_outliers[col_name_remove].describe())
+
+        # 2. Transform data to reduce skewness
+# You can apply log transformation, square root, or other transformations to make data less skewed.
+# Example of applying a log transformation to a column
+col_name_transform = 'SalePrice'
+print(f"Before transforming data in '{col_name_transform}':")
+print(data[col_name_transform].describe())
+data[col_name_transform] = data[col_name_transform].apply(lambda x: np.log(x) if x > 0 else 0)
+print(f"After transforming data in '{col_name_transform}':")
+print(data[col_name_transform].describe())
+
+        # 3. Impute outliers
+# You can impute outliers with a specific value (e.g., here, the median).
+# Example of imputing outliers with the median in a specific column
+col_name_impute = 'SalePrice'
+threshold_impute = 1.5
+print(f"Before imputing outliers in '{col_name_impute}':")
+print(data[col_name_impute].describe())
+q1 = data[col_name_impute].quantile(0.25)
+q3 = data[col_name_impute].quantile(0.75)
+iqr = q3 - q1
+lower_bound = q1 - threshold_impute * iqr
+upper_bound = q3 + threshold_impute * iqr
+median_col = data[col_name_impute].median()
+data[col_name_impute] = data[col_name_impute].apply(lambda x: median_col if x < lower_bound or x > upper_bound else x)
+print(f"After imputing outliers in '{col_name_impute}':")
+print(data[col_name_impute].describe())
+
+        #Boxplots for each attributes individually 
+num_cols = filtered_df.select_dtypes(include=[np.number]).columns
+n_cols = len(num_cols)
+n_rows = n_cols // 4 + (n_cols % 4 > 0)
+plt.figure(figsize=(16, 16))
+for i, col in enumerate(num_cols):
+    plt.subplot(n_rows, 4, i + 1)
+    plt.boxplot(filtered_df[col], vert=False)
+    plt.title(col)
+plt.subplots_adjust(wspace=0.5)
+plt.show()
+
+        #OLS Regression Results for all the attributes 
+import pandas as pd
+import statsmodels.api as sm
+data = pd.read_csv("C:\\Users\\Divya Shree\\Desktop\\train.csv")
+# Select numeric columns and drop non-numeric columns
+X = data.select_dtypes(include=[float, int])
+X = X.drop(columns=['SalePrice'])
+# Handle missing values by imputing with the median
+X = X.fillna(X.median())
+# Remove rows with infinite values
+X = X.replace([np.inf, -np.inf], np.nan).dropna()
+Y = data['SalePrice']
+# Add a constant (intercept) to the independent variable
+X = sm.add_constant(X)
+# Create a model
+model = sm.OLS(Y, X)
+# Fit the model
+results = model.fit()
+# Print the summary of the regression
+print(results.summary())
+
+
+        # Filter and print OLS Regression Results for P<0.05
+import pandas as pd
+import statsmodels.api as sm
+data = pd.read_csv("C:\\Users\\Divya Shree\\Desktop\\train.csv")
+# Select numeric columns and drop non-numeric columns
+X = data.select_dtypes(include=[float, int])
+X = X.drop(columns=['SalePrice']) 
+# Handle missing values by imputing with the median
+X = X.fillna(X.median())
+# Remove rows with infinite values
+X = X.replace([np.inf, -np.inf], np.nan).dropna()
+Y = data['SalePrice']
+# Add a constant (intercept) to the independent variable
+X = sm.add_constant(X)
+# Create a model
+model = sm.OLS(Y, X)
+# Fit the model
+results = model.fit()
+# Print the summary of the regression
+summary = results.summary()
+# Extract p-values and filter those less than 0.05
+p_values = results.pvalues
+significant_p_values = p_values[p_values < 0.05]
+print("Significant p-values:")
+print(significant_p_values)
+print("Original DataFrame:")
+print(df)
+
+# Filling the missing values of any attribute (here, Alley), using backward fill
+# Specify the column to fill with backward fill
+column_to_fill = 'Alley'
+
+# Fill missing values in the specified column using backward fill
+df[column_to_fill] = df[column_to_fill].fillna(method='bfill')
+
+# View the DataFrame after filling missing values
+print("\nDataFrame after filling missing values with backward fill:")
+print(df)
